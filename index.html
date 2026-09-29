@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu Driven Calculator</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+
+    .calculator {
+        width: 360px;
+        background: white;
+        padding: 25px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    h1 {
+        text-align: center;
+        margin-top: 0;
+        color: #333;
+        font-size: 25px;
+    }
+
+    .display {
+        width: 100%;
+        height: 65px;
+        font-size: 25px;
+        text-align: right;
+        padding: 10px;
+        border: 2px solid #ddd;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+
+    .menu {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 12px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+    }
+
+    .input {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 16px;
+    }
+
+    .buttons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+    }
+
+    button {
+        padding: 14px 5px;
+        border: none;
+        border-radius: 8px;
+        background: #667eea;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        opacity: 0.85;
+    }
+
+    .clear {
+        background: #e74c3c;
+        grid-column: span 4;
+    }
+
+    .result {
+        margin-top: 15px;
+        padding: 12px;
+        background: #f1f3f5;
+        border-radius: 8px;
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="calculator">
+
+    <h1>Menu Driven Calculator</h1>
+
+    <input type="text" id="display" class="display" readonly>
+
+    <select id="operation" class="menu">
+        <option value="add">Addition (+)</option>
+        <option value="subtract">Subtraction (-)</option>
+        <option value="multiply">Multiplication (×)</option>
+        <option value="divide">Division (÷)</option>
+        <option value="power">Power (xʸ)</option>
+        <option value="sqrt">Square Root (√x)</option>
+        <option value="log">Logarithm (log10)</option>
+        <option value="ln">Natural Log (ln)</option>
+        <option value="sin">Sine (sin)</option>
+        <option value="cos">Cosine (cos)</option>
+        <option value="tan">Tangent (tan)</option>
+    </select>
+
+    <input type="number" id="num1" class="input" placeholder="Enter first number">
+
+    <input type="number" id="num2" class="input" placeholder="Enter second number">
+
+    <div class="buttons">
+        <button onclick="calculate()">Calculate</button>
+        <button onclick="clearCalculator()" class="clear">Clear</button>
+    </div>
+
+    <div class="result" id="result">
+        Result: -
+    </div>
+
+</div>
+
+<script>
+
+function calculate() {
+
+    const operation = document.getElementById("operation").value;
+
+    const num1 = parseFloat(document.getElementById("num1").value);
+    const num2 = parseFloat(document.getElementById("num2").value);
+
+    let result;
+
+    if (isNaN(num1)) {
+        document.getElementById("result").innerHTML =
+            "Please enter a number.";
+        return;
+    }
+
+    switch(operation) {
+
+        case "add":
+            if (isNaN(num2)) return showError();
+            result = num1 + num2;
+            break;
+
+        case "subtract":
+            if (isNaN(num2)) return showError();
+            result = num1 - num2;
+            break;
+
+        case "multiply":
+            if (isNaN(num2)) return showError();
+            result = num1 * num2;
+            break;
+
+        case "divide":
+            if (isNaN(num2)) return showError();
+
+            if (num2 === 0) {
+                document.getElementById("result").innerHTML =
+                    "Cannot divide by zero.";
+                return;
+            }
+
+            result = num1 / num2;
+            break;
+
+        case "power":
+            if (isNaN(num2)) return showError();
+            result = Math.pow(num1, num2);
+            break;
+
+        case "sqrt":
+            if (num1 < 0) {
+                document.getElementById("result").innerHTML =
+                    "Square root of a negative number is not real.";
+                return;
+            }
+
+            result = Math.sqrt(num1);
+            break;
+
+        case "log":
+            if (num1 <= 0) {
+                document.getElementById("result").innerHTML =
+                    "Log is defined only for positive numbers.";
+                return;
+            }
+
+            result = Math.log10(num1);
+            break;
+
+        case "ln":
+            if (num1 <= 0) {
+                document.getElementById("result").innerHTML =
+                    "Natural log is defined only for positive numbers.";
+                return;
+            }
+
+            result = Math.log(num1);
+            break;
+
+        case "sin":
+            result = Math.sin(num1 * Math.PI / 180);
